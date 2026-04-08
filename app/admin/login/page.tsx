@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/admin";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +29,7 @@ export default function AdminLoginPage() {
     if (result?.error) {
       setError("ელ-ფოსტა ან პაროლი არასწორია.");
     } else {
-      router.push("/admin");
+      router.push(callbackUrl);
       router.refresh();
     }
   }
