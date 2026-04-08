@@ -10,8 +10,8 @@ interface Product {
   id: string;
   name: string;
   slug: string;
-  basePrice: number | { toNumber: () => number };
-  salePrice?: number | { toNumber: () => number } | null;
+  basePrice: number | string | { toString: () => string };
+  salePrice?: number | string | { toString: () => string } | null;
   stock: number;
   isPublished: boolean;
   isFeatured: boolean;
@@ -20,8 +20,8 @@ interface Product {
   variants: { id: string }[];
 }
 
-function toNum(v: number | { toNumber: () => number }) {
-  return typeof v === "number" ? v : v.toNumber();
+function toNum(v: number | string | { toString: () => string }) {
+  return typeof v === "number" ? v : parseFloat(v.toString());
 }
 
 export default function ProductsTable({ products }: { products: Product[] }) {

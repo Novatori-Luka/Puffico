@@ -12,8 +12,8 @@ interface ExistingProduct {
   slug: string;
   description?: string | null;
   shortDesc?: string | null;
-  basePrice: number | { toNumber: () => number };
-  salePrice?: number | { toNumber: () => number } | null;
+  basePrice: number | string | { toString: () => string };
+  salePrice?: number | string | { toString: () => string } | null;
   sku: string;
   stock: number;
   isFeatured: boolean;
@@ -29,15 +29,15 @@ interface ExistingProduct {
     colorHex?: string | null;
     shape?: string | null;
     filling?: string | null;
-    priceAdj?: number | { toNumber: () => number } | null;
+    priceAdj?: number | string | { toString: () => string } | null;
     stock: number;
     sku?: string | null;
   }[];
 }
 
-function toNum(v: number | { toNumber: () => number } | null | undefined): number {
+function toNum(v: number | string | { toString: () => string } | null | undefined): number {
   if (!v) return 0;
-  return typeof v === "number" ? v : v.toNumber();
+  return typeof v === "number" ? v : parseFloat(v.toString());
 }
 
 function slugify(text: string) {
