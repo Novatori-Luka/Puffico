@@ -1,0 +1,122 @@
+// Mock products used when DB is not connected
+// Replace with real DB queries once Supabase is configured
+
+export const MOCK_PRODUCTS = [
+  {
+    id: "mock-1",
+    name: "ნატურალური ლინენის პუფი",
+    slug: "natural-linen-pouf",
+    shortDesc: "ბუნებრივი ლინენით შეკერილი, ბამბის შიგთავსით",
+    basePrice: 180,
+    salePrice: null,
+    isFeatured: true,
+    isPublished: true,
+    stock: 12,
+    category: "Standard",
+    images: [
+      { url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600", alt: "ლინენის პუფი", isPrimary: true },
+      { url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600", alt: "ლინენის პუფი — სხვა კუთხე", isPrimary: false },
+    ],
+    variants: [
+      { size: "M", color: "ბუნებრივი ლინენი — ბეჟი", colorHex: "#d1be96", shape: "მრგვალი", filling: "ბუნებრივი" },
+      { size: "L", color: "ბუნებრივი ლინენი — ბეჟი", colorHex: "#d1be96", shape: "მრგვალი", filling: "ბუნებრივი" },
+    ],
+  },
+  {
+    id: "mock-2",
+    name: "ტერაკოტა ბამბის პუფი",
+    slug: "terracotta-cotton-pouf",
+    shortDesc: "სუფთა ბამბა, ტერაკოტის ელფერი — თბილი ინტერიერისთვის",
+    basePrice: 220,
+    salePrice: 185,
+    isFeatured: true,
+    isPublished: true,
+    stock: 8,
+    category: "Premium",
+    images: [
+      { url: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=600", alt: "ტერაკოტა პუფი", isPrimary: true },
+      { url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600", alt: "ტერაკოტა პუფი 2", isPrimary: false },
+    ],
+    variants: [
+      { size: "S", color: "ტერაკოტა", colorHex: "#e27249", shape: "კვადრატი", filling: "ბუნებრივი" },
+      { size: "M", color: "ტერაკოტა", colorHex: "#e27249", shape: "კვადრატი", filling: "ბუნებრივი" },
+      { size: "L", color: "ტერაკოტა", colorHex: "#e27249", shape: "კვადრატი", filling: "ბუნებრივი" },
+    ],
+  },
+  {
+    id: "mock-3",
+    name: "მიწისფერი ხავსი — Luxury",
+    slug: "earthy-moss-luxury",
+    shortDesc: "პრემიუმ ხელნაკეთი პუფი ეკო-მატყლით",
+    basePrice: 380,
+    salePrice: null,
+    isFeatured: false,
+    isPublished: true,
+    stock: 4,
+    category: "Luxury",
+    images: [
+      { url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600", alt: "Luxury პუფი", isPrimary: true },
+    ],
+    variants: [
+      { size: "XL", color: "მიწისფერი ხავსი", colorHex: "#567a47", shape: "მრგვალი", filling: "ბუნებრივი" },
+    ],
+  },
+  {
+    id: "mock-4",
+    name: "სათადარიგო ქვიშისფერი პუფი",
+    slug: "sand-minimal-pouf",
+    shortDesc: "მინიმალური დიზაინი, მაქსიმალური კომფორტი",
+    basePrice: 150,
+    salePrice: null,
+    isFeatured: false,
+    isPublished: true,
+    stock: 20,
+    category: "Standard",
+    images: [
+      { url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600", alt: "ქვიშისფერი პუფი", isPrimary: true },
+    ],
+    variants: [
+      { size: "S", color: "ქვიშისფერი", colorHex: "#d1be96", shape: "კვადრატი", filling: "სინთეტიკური" },
+      { size: "M", color: "ქვიშისფერი", colorHex: "#d1be96", shape: "კვადრატი", filling: "სინთეტიკური" },
+    ],
+  },
+  {
+    id: "mock-5",
+    name: "მწვანე ბოტანიკური პუფი",
+    slug: "botanical-green-pouf",
+    shortDesc: "ბუნებრივი ბამბა, ბოტანიკური ფერი — სიმშვიდე ოთახში",
+    basePrice: 195,
+    salePrice: null,
+    isFeatured: true,
+    isPublished: true,
+    stock: 7,
+    category: "Premium",
+    images: [
+      { url: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=600", alt: "მწვანე პუფი", isPrimary: true },
+    ],
+    variants: [
+      { size: "M", color: "ბოტანიკური მწვანე", colorHex: "#739963", shape: "მრგვალი", filling: "ბუნებრივი" },
+      { size: "L", color: "ბოტანიკური მწვანე", colorHex: "#739963", shape: "მრგვალი", filling: "ბუნებრივი" },
+    ],
+  },
+  {
+    id: "mock-6",
+    name: "ოფ-უაით მინიმალისტი",
+    slug: "offwhite-minimalist",
+    shortDesc: "სუფთა, მსუბუქი — ნებისმიერ ინტერიერში",
+    basePrice: 165,
+    salePrice: 140,
+    isFeatured: false,
+    isPublished: true,
+    stock: 15,
+    category: "Standard",
+    images: [
+      { url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600", alt: "ოფ-უაით პუფი", isPrimary: true },
+    ],
+    variants: [
+      { size: "S", color: "ოფ-უაით", colorHex: "#fdfcf9", shape: "მრგვალი", filling: "სინთეტიკური" },
+      { size: "M", color: "ოფ-უაით", colorHex: "#fdfcf9", shape: "მრგვალი", filling: "სინთეტიკური" },
+      { size: "L", color: "ოფ-უაით", colorHex: "#fdfcf9", shape: "მრგვალი", filling: "სინთეტიკური" },
+    ],
+  },
+];

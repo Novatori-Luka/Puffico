@@ -1,0 +1,175 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import ProductCard from "@/components/catalog/ProductCard";
+import { MOCK_PRODUCTS } from "@/lib/mock-products";
+import { getPublishedProducts } from "@/app/actions/products";
+import { ArrowRight, Leaf, MapPin, Heart } from "lucide-react";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "https://puffico.ge" },
+  openGraph: {
+    url: "https://puffico.ge",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Puffico" }],
+  },
+};
+
+export default async function HomePage() {
+  let featured = await getPublishedProducts({ sort: "featured" });
+  if (featured.length === 0) {
+    featured = MOCK_PRODUCTS.filter((p) => p.isFeatured) as unknown as typeof featured;
+  }
+  const displayFeatured = featured.slice(0, 6);
+
+  function toNum(v: number | { toNumber: () => number } | null | undefined): number {
+    if (!v) return 0;
+    return typeof v === "number" ? v : v.toNumber();
+  }
+
+  return (
+    <div className="min-h-screen">
+      {/* ─── Hero ─────────────────────────────────────────────────────── */}
+      <section className="relative bg-cream-100 overflow-hidden">
+        <div className="section-container py-20 md:py-28 lg:py-36">
+          <div className="max-w-2xl animate-fade-in">
+            <span className="inline-block text-xs font-semibold tracking-widest text-earth-400 uppercase mb-4">
+              ხელნაკეთი • ბუნებრივი • ქართული
+            </span>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-puff-dark leading-[1.1] tracking-tight">
+              ბუნებრივი კომფორტი შენი სახლისთვის
+            </h1>
+            <p className="mt-6 text-lg text-puff-muted max-w-lg leading-relaxed">
+              Puffico-ს პუფები შეიქმნება ნატურალური მასალებისგან — ბამბა, ლინენი, მატყლი.
+              ყოველი ნაჭერი ხელნაკეთია თბილისში.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/catalog" className="btn-primary py-3.5 px-8 text-base">
+                პროდუქტების ნახვა
+                <ArrowRight size={18} />
+              </Link>
+              <Link href="/about" className="btn-secondary py-3.5 px-8 text-base">
+                ჩვენს შესახებ
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Decorative shape */}
+        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-sand-100 hidden lg:block" />
+      </section>
+
+      {/* ─── Featured Products ─────────────────────────────────────────── */}
+      <section className="section-container py-16 md:py-20">
+        <div className="flex items-end justify-between mb-8 md:mb-10">
+          <div>
+            <h2 className="text-3xl font-display font-bold text-puff-dark">
+              რჩეული პუფები
+            </h2>
+            <p className="text-puff-muted mt-1 text-sm">ჩვენი ყველაზე პოპულარული კოლექცია</p>
+          </div>
+          <Link
+            href="/catalog"
+            className="hidden md:flex items-center gap-1.5 text-sm font-medium text-earth-500 hover:text-earth-600 transition-colors"
+          >
+            ყველა ნახვა
+            <ArrowRight size={15} />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+          {displayFeatured.map((p) => (
+            <ProductCard
+              key={p.id}
+              id={p.id}
+              name={p.name}
+              slug={p.slug}
+              shortDesc={p.shortDesc}
+              basePrice={toNum(p.basePrice)}
+              salePrice={p.salePrice ? toNum(p.salePrice) : null}
+              images={p.images}
+              variants={p.variants}
+            />
+          ))}
+        </div>
+
+        <div className="text-center mt-8 md:hidden">
+          <Link href="/catalog" className="btn-secondary">
+            ყველა პროდუქტი
+            <ArrowRight size={15} />
+          </Link>
+        </div>
+      </section>
+
+      {/* ─── Brand Values ──────────────────────────────────────────────── */}
+      <section className="bg-cream-100 border-y border-sand-100">
+        <div className="section-container py-14 md:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+            {[
+              {
+                icon: Leaf,
+                title: "100% ბუნებრივი",
+                desc: "ვიყენებთ მხოლოდ სერტიფიცირებულ ბუნებრივ მასალებს — ლინენი, ბამბა, ეკო-მატყლი.",
+              },
+              {
+                icon: MapPin,
+                title: "ქართული წარმოება",
+                desc: "ყოველი პუფი შეიქმნება ჩვენს სახელოსნოში თბილისში, გამოცდილი ოსტატების ხელით.",
+              },
+              {
+                icon: Heart,
+                title: "კომფორტი და სიყვარული",
+                desc: "Puffico-ს პუფი მეტია, ვიდრე ავეჯი — ეს სახლის ნაწილია, შექმნილი სიყვარულით.",
+              },
+            ].map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="text-center space-y-3">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-earth-50 text-earth-400 mx-auto">
+                  <Icon size={22} strokeWidth={1.8} />
+                </div>
+                <h3 className="font-display font-bold text-puff-dark text-lg">{title}</h3>
+                <p className="text-puff-muted text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── How It Works ──────────────────────────────────────────────── */}
+      <section className="section-container py-16 md:py-20">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-display font-bold text-puff-dark">როგორ მუშაობს?</h2>
+          <p className="text-puff-muted mt-2 text-sm">შეკვეთიდან მიტანამდე — 4 მარტივი ნაბიჯი</p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {[
+            { step: "01", title: "აირჩიეთ", desc: "ზომა, ფერი, ფორმა და შიგთავსი თქვენი გემოვნებით" },
+            { step: "02", title: "დააკუსტომიზეთ", desc: "ინდივიდუალური ვარიაციები ხელმისაწვდომია" },
+            { step: "03", title: "შეუკვეთეთ", desc: "მარტივი checkout — ტელეფონი და მისამართი" },
+            { step: "04", title: "მიიღეთ", desc: "3–5 სამუშაო დღეში მიგიტანთ პირდაპირ სახლში" },
+          ].map(({ step, title, desc }) => (
+            <div key={step} className="text-center space-y-2">
+              <span className="text-4xl font-display font-bold text-sand-200">{step}</span>
+              <h3 className="font-semibold text-puff-dark">{title}</h3>
+              <p className="text-sm text-puff-muted leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── CTA Banner ────────────────────────────────────────────────── */}
+      <section className="bg-earth-400">
+        <div className="section-container py-12 text-center">
+          <h2 className="text-3xl font-display font-bold text-cream-100 mb-3">
+            მზად ხართ თქვენი პუფის ასარჩევად?
+          </h2>
+          <p className="text-cream-200/80 mb-6 text-sm">
+            უფასო კონსულტაცია და მიტანა თბილისში
+          </p>
+          <Link href="/catalog" className="inline-flex items-center gap-2 bg-puff-white text-earth-500 font-semibold px-8 py-3.5 rounded-xl hover:bg-cream-100 transition-colors text-sm">
+            კატალოგის ნახვა
+            <ArrowRight size={16} />
+          </Link>
+        </div>
+      </section>
+    </div>
+  );
+}
