@@ -39,7 +39,7 @@ export default async function HomePage() {
 
         <h1
           className="animate-fade-up font-display font-bold text-puff-dark leading-[1.05] tracking-tight max-w-4xl"
-          style={{ fontSize: "clamp(2.75rem, 6.5vw, 5rem)", animationDelay: "100ms" }}
+          style={{ fontSize: "clamp(2rem, 4.5vw, 3.5rem)", animationDelay: "100ms" }}
         >
           ბუნებრივი კომფორტი შენი სახლისთვის
         </h1>
@@ -144,29 +144,6 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ─── How It Works ──────────────────────────────────────────────── */}
-      <section className="section-container py-16 md:py-20">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-display font-bold text-puff-dark">როგორ მუშაობს?</h2>
-          <p className="text-puff-muted mt-2 text-sm">შეკვეთიდან მიტანამდე — 4 მარტივი ნაბიჯი</p>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {[
-            { step: "01", title: "აირჩიეთ", desc: "ზომა, ფერი, ფორმა და შიგთავსი თქვენი გემოვნებით" },
-            { step: "02", title: "დააკუსტომიზეთ", desc: "ინდივიდუალური ვარიაციები ხელმისაწვდომია" },
-            { step: "03", title: "შეუკვეთეთ", desc: "მარტივი checkout — ტელეფონი და მისამართი" },
-            { step: "04", title: "მიიღეთ", desc: "3–5 სამუშაო დღეში მიგიტანთ პირდაპირ სახლში" },
-          ].map(({ step, title, desc }) => (
-            <div key={step} className="text-center space-y-2">
-              <span className="text-4xl font-display font-bold text-sand-200">{step}</span>
-              <h3 className="font-semibold text-puff-dark">{title}</h3>
-              <p className="text-sm text-puff-muted leading-relaxed">{desc}</p>
-            </div>
-          ))}
         </div>
       </section>
 

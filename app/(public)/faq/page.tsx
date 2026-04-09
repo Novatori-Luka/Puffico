@@ -22,20 +22,8 @@ export const metadata = {
   description: "პასუხები ხშირად დასმულ კითხვებს შეკვეთის, მიწოდების და მასალების შესახებ",
 };
 
-const CATEGORIES = ["ყველა", "შეკვეთა", "მიწოდება", "მასალები", "დაბრუნება"];
-
-export default async function FaqPage({
-  searchParams,
-}: {
-  searchParams: { cat?: string };
-}) {
-  const allItems = await getFaqItems();
-  const activeCategory = searchParams.cat ?? "ყველა";
-
-  const items =
-    activeCategory === "ყველა"
-      ? allItems
-      : allItems.filter((i) => i.category === activeCategory);
+export default async function FaqPage() {
+  const items = await getFaqItems();
 
   return (
     <div className="min-h-screen bg-puff-white">
@@ -61,28 +49,6 @@ export default async function FaqPage({
       </section>
 
       <div className="section-container py-10 md:py-14 max-w-3xl">
-        {/* Category tabs */}
-        <div className="flex gap-2 flex-wrap mb-8">
-          {CATEGORIES.map((cat) => {
-            const isActive = activeCategory === cat;
-            const href = cat === "ყველა" ? "/faq" : `/faq?cat=${encodeURIComponent(cat)}`;
-            return (
-              <a
-                key={cat}
-                href={href}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-earth-400 text-white"
-                    : "bg-cream-100 text-puff-dark hover:bg-cream-200"
-                }`}
-              >
-                {cat}
-              </a>
-            );
-          })}
-        </div>
-
-        {/* Accordion */}
         <FaqAccordion items={items} />
 
         {/* CTA */}

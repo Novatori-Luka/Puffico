@@ -27,17 +27,8 @@ export const metadata = {
   description: "ჩვენი სახელოსნო, ინტერიერები და პუფების დეტალები",
 };
 
-const CATEGORIES = ["ყველა", "ინტერიერი", "სახელოსნო", "დეტალი"];
-
-export default async function GalleryPage({
-  searchParams,
-}: {
-  searchParams: { cat?: string };
-}) {
-  const activeCategory = searchParams.cat ?? "ყველა";
-  const images = await getGalleryImages(
-    activeCategory === "ყველა" ? undefined : activeCategory
-  );
+export default async function GalleryPage() {
+  const images = await getGalleryImages();
 
   return (
     <div className="min-h-screen bg-puff-white">
@@ -57,30 +48,6 @@ export default async function GalleryPage({
       </section>
 
       <div className="section-container py-10 md:py-14">
-        {/* Category filters */}
-        <div className="flex gap-2 flex-wrap mb-8">
-          {CATEGORIES.map((cat) => {
-            const isActive = activeCategory === cat;
-            const href =
-              cat === "ყველა"
-                ? "/gallery"
-                : `/gallery?cat=${encodeURIComponent(cat)}`;
-            return (
-              <a
-                key={cat}
-                href={href}
-                className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-earth-400 text-white"
-                    : "bg-cream-100 text-puff-dark hover:bg-cream-200"
-                }`}
-              >
-                {cat}
-              </a>
-            );
-          })}
-        </div>
-
         <GalleryGrid images={images} />
       </div>
     </div>
