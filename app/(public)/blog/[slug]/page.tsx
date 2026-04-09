@@ -1,9 +1,12 @@
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Calendar, Tag } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { MOCK_BLOG_POSTS } from "@/lib/mock-content";
+
+export const revalidate = 3600;
 
 async function getPost(slug: string) {
   try {
@@ -16,6 +19,9 @@ async function getPost(slug: string) {
   }
   return MOCK_BLOG_POSTS.find((p) => p.slug === slug) ?? null;
 }
+
+// Deduplicate DB call across generateMetadata + page render within the same request
+const getPostCached = cache(getPost);
 
 async function getRelated(slug: string, category: string) {
   try {
@@ -30,8 +36,20 @@ async function getRelated(slug: string, category: string) {
   return MOCK_BLOG_POSTS.filter((p) => p.category === category && p.slug !== slug).slice(0, 2);
 }
 
+export async function generateStaticParams() {
+  try {
+    const posts = await prisma.blogPost.findMany({
+      where: { isPublished: true },
+      select: { slug: true },
+    });
+    return posts.map(({ slug }) => ({ slug }));
+  } catch {
+    return MOCK_BLOG_POSTS.map(({ slug }) => ({ slug }));
+  }
+}
+
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = await getPost(params.slug);
+  const post = await getPostCached(params.slug);
   if (!post) return {};
   return {
     title: `${post.title} — Puffico`,
@@ -40,7 +58,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = await getPost(params.slug);
+  const post = await getPostCached(params.slug);
   if (!post) notFound();
 
   const related = await getRelated(params.slug, post.category ?? "");

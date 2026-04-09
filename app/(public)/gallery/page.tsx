@@ -1,21 +1,26 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { MOCK_GALLERY_IMAGES } from "@/lib/mock-content";
 import GalleryGrid from "@/components/content/GalleryGrid";
 
-async function getGalleryImages(category?: string) {
-  try {
-    const images = await prisma.galleryImage.findMany({
-      where: category ? { category } : undefined,
-      orderBy: { position: "asc" },
-    });
-    if (images.length > 0) return images;
-  } catch {
-    // fall through
-  }
-  const mock = MOCK_GALLERY_IMAGES;
-  if (category) return mock.filter((i) => i.category === category);
-  return mock;
-}
+const getGalleryImages = unstable_cache(
+  async (category?: string) => {
+    try {
+      const images = await prisma.galleryImage.findMany({
+        where: category ? { category } : undefined,
+        orderBy: { position: "asc" },
+      });
+      if (images.length > 0) return images;
+    } catch {
+      // fall through
+    }
+    const mock = MOCK_GALLERY_IMAGES;
+    if (category) return mock.filter((i) => i.category === category);
+    return mock;
+  },
+  ["gallery-images"],
+  { revalidate: 3600, tags: ["gallery"] }
+);
 
 export const metadata = {
   title: "გალერეა — Puffico",

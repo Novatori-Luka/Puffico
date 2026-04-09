@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import { getProductBySlug, getPublishedProducts } from "@/app/actions/products";
+import { prisma } from "@/lib/prisma";
 import { MOCK_PRODUCTS } from "@/lib/mock-products";
 import ProductGallery from "@/components/product/ProductGallery";
 import AddToCartSection from "@/components/product/AddToCartSection";
@@ -7,8 +9,25 @@ import ProductCard from "@/components/catalog/ProductCard";
 import { Leaf, MapPin, Shield, ShoppingBag } from "lucide-react";
 import type { Metadata } from "next";
 
+export const revalidate = 3600;
+
 interface PageProps {
   params: { slug: string };
+}
+
+// Deduplicate DB call across generateMetadata + page render within the same request
+const getProductCached = cache(getProductBySlug);
+
+export async function generateStaticParams() {
+  try {
+    const products = await prisma.product.findMany({
+      where: { isPublished: true },
+      select: { slug: true },
+    });
+    return products.map(({ slug }) => ({ slug }));
+  } catch {
+    return MOCK_PRODUCTS.map(({ slug }) => ({ slug }));
+  }
 }
 
 function toNum(v: number | { toNumber: () => number } | null | undefined): number {
@@ -17,7 +36,7 @@ function toNum(v: number | { toNumber: () => number } | null | undefined): numbe
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const product = await getProductBySlug(params.slug);
+  const product = await getProductCached(params.slug);
   if (!product) {
     const mock = MOCK_PRODUCTS.find((p) => p.slug === params.slug);
     if (!mock) return {};
@@ -33,8 +52,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function ProductPage({ params }: PageProps) {
-  // Try real DB, fallback to mock
-  const dbProduct = await getProductBySlug(params.slug);
+  // Try real DB, fallback to mock (cache() deduplicates if generateMetadata already fetched it)
+  const dbProduct = await getProductCached(params.slug);
   let relatedRaw = await getPublishedProducts({ sort: "featured" });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
