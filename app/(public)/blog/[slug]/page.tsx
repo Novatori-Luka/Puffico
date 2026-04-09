@@ -63,7 +63,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   const related = await getRelated(params.slug, post.category ?? "");
 
-  const paragraphs = post.content.split("\n\n").filter(Boolean);
+  const isHtml = /<[a-z][\s\S]*?>/i.test(post.content);
 
   return (
     <div className="min-h-screen bg-puff-white">
@@ -115,28 +115,33 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </h1>
 
           {/* Content */}
-          <div className="prose-like space-y-4">
-            {paragraphs.map((para, i) => {
-              if (para.startsWith("•") || para.includes("\n•")) {
-                const items = para.split("\n").filter((l) => l.startsWith("•"));
+          {isHtml ? (
+            <div
+              className="blog-content text-puff-muted leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
+          ) : (
+            <div className="prose-like space-y-4">
+              {post.content.split("\n\n").filter(Boolean).map((para, i) => {
+                if (para.startsWith("•") || para.includes("\n•")) {
+                  const items = para.split("\n").filter((l) => l.startsWith("•"));
+                  return (
+                    <ul key={i} className="space-y-1.5 pl-1">
+                      {items.map((item, j) => (
+                        <li key={j} className="flex items-start gap-2 text-puff-muted text-base leading-relaxed">
+                          <span className="text-earth-400 mt-1 shrink-0">•</span>
+                          <span>{item.replace("•", "").trim()}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  );
+                }
                 return (
-                  <ul key={i} className="space-y-1.5 pl-1">
-                    {items.map((item, j) => (
-                      <li key={j} className="flex items-start gap-2 text-puff-muted text-base leading-relaxed">
-                        <span className="text-earth-400 mt-1 shrink-0">•</span>
-                        <span>{item.replace("•", "").trim()}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <p key={i} className="text-puff-muted leading-relaxed text-base">{para}</p>
                 );
-              }
-              return (
-                <p key={i} className="text-puff-muted leading-relaxed text-base">
-                  {para}
-                </p>
-              );
-            })}
-          </div>
+              })}
+            </div>
+          )}
 
           {/* Divider */}
           <div className="border-t border-sand-100 mt-10 pt-8">
