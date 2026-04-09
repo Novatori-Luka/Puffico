@@ -1,21 +1,28 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Calendar, Tag } from "lucide-react";
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { MOCK_BLOG_POSTS } from "@/lib/mock-content";
 
-async function getBlogPosts() {
-  try {
-    const posts = await prisma.blogPost.findMany({
-      where: { isPublished: true },
-      orderBy: { publishedAt: "desc" },
-    });
-    if (posts.length === 0) return MOCK_BLOG_POSTS;
-    return posts;
-  } catch {
-    return MOCK_BLOG_POSTS;
-  }
-}
+export const revalidate = 3600;
+
+const getBlogPosts = unstable_cache(
+  async () => {
+    try {
+      const posts = await prisma.blogPost.findMany({
+        where: { isPublished: true },
+        orderBy: { publishedAt: "desc" },
+      });
+      if (posts.length === 0) return MOCK_BLOG_POSTS;
+      return posts;
+    } catch {
+      return MOCK_BLOG_POSTS;
+    }
+  },
+  ["blog-posts"],
+  { revalidate: 3600, tags: ["blog"] }
+);
 
 export const metadata = {
   title: "ბლოგი — Puffico",

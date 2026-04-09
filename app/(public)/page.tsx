@@ -5,6 +5,8 @@ import { MOCK_PRODUCTS } from "@/lib/mock-products";
 import { getPublishedProducts } from "@/app/actions/products";
 import { ArrowRight, Leaf, MapPin, Heart } from "lucide-react";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   alternates: { canonical: "https://puffico.ge" },
   openGraph: {

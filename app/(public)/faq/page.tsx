@@ -1,16 +1,21 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { MOCK_FAQ_ITEMS } from "@/lib/mock-content";
 import FaqAccordion from "@/components/content/FaqAccordion";
 
-async function getFaqItems() {
-  try {
-    const items = await prisma.faqItem.findMany({ orderBy: { position: "asc" } });
-    if (items.length > 0) return items;
-  } catch {
-    // fall through
-  }
-  return MOCK_FAQ_ITEMS;
-}
+const getFaqItems = unstable_cache(
+  async () => {
+    try {
+      const items = await prisma.faqItem.findMany({ orderBy: { position: "asc" } });
+      if (items.length > 0) return items;
+    } catch {
+      // fall through
+    }
+    return MOCK_FAQ_ITEMS;
+  },
+  ["faq-items"],
+  { revalidate: 86400, tags: ["faq"] }
+);
 
 export const metadata = {
   title: "ხშირად დასმული კითხვები — Puffico",
