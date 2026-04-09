@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import ProductCard from "@/components/catalog/ProductCard";
 import { MOCK_PRODUCTS } from "@/lib/mock-products";
@@ -31,97 +30,45 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen">
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#F5EFE6] min-h-screen flex items-center">
-        {/* Linen texture overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.04] pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='1' height='4' x='1' fill='%236B4F3A' opacity='.5'/%3E%3Crect width='4' height='1' y='1' fill='%236B4F3A' opacity='.5'/%3E%3C/svg%3E")`,
-          }}
-        />
+      <section className="relative bg-[#F5F0E8] min-h-screen flex flex-col items-center justify-center text-center px-4">
 
-        <div className="section-container w-full py-20 lg:py-0">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-0 items-center min-h-screen lg:py-0 py-4">
+        <span className="animate-fade-up inline-block text-xs font-semibold tracking-widest text-earth-400 uppercase mb-6"
+          style={{ animationDelay: "0ms" }}>
+          ხელნაკეთი • ბუნებრივი • ქართული
+        </span>
 
-            {/* ── Left: text ── */}
-            <div className="flex flex-col justify-center lg:pr-12 animate-fade-up order-1">
-              <span
-                className="inline-block text-xs font-semibold tracking-widest uppercase mb-6"
-                style={{ color: "#9e7248", animationDelay: "0ms" }}
-              >
-                ხელნაკეთი • ბუნებრივი • ქართული
-              </span>
+        <h1
+          className="animate-fade-up font-display font-bold text-puff-dark leading-[1.05] tracking-tight max-w-4xl"
+          style={{ fontSize: "clamp(2.75rem, 6.5vw, 5rem)", animationDelay: "100ms" }}
+        >
+          ბუნებრივი კომფორტი შენი სახლისთვის
+        </h1>
 
-              <h1
-                className="font-display font-bold text-puff-dark leading-[1.08] tracking-tight animate-fade-up"
-                style={{
-                  fontSize: "clamp(2.5rem, 5vw, 4.25rem)",
-                  animationDelay: "80ms",
-                }}
-              >
-                ბუნებრივი კომფორტი შენი სახლისთვის
-              </h1>
+        <p className="animate-fade-up mt-6 text-lg text-puff-muted max-w-xl leading-relaxed"
+          style={{ animationDelay: "200ms" }}>
+          Puffico-ს პუფები შეიქმნება ნატურალური მასალებისგან — ბამბა, ლინენი, მატყლი.
+          ყოველი ნაჭერი ხელნაკეთია თბილისში.
+        </p>
 
-              <p
-                className="mt-6 text-lg text-puff-muted max-w-[480px] leading-relaxed animate-fade-up"
-                style={{ animationDelay: "180ms" }}
-              >
-                Puffico-ს პუფები შეიქმნება ნატურალური მასალებისგან — ბამბა, ლინენი, მატყლი.
-                ყოველი ნაჭერი ხელნაკეთია თბილისში.
-              </p>
+        <div className="animate-fade-up mt-8 flex flex-wrap gap-3 justify-center"
+          style={{ animationDelay: "300ms" }}>
+          <Link href="/catalog" className="btn-primary py-3.5 px-8 text-base">
+            პროდუქტების ნახვა
+            <ArrowRight size={18} />
+          </Link>
+          <Link href="/about" className="btn-secondary py-3.5 px-8 text-base">
+            ჩვენს შესახებ
+          </Link>
+        </div>
 
-              <div
-                className="mt-8 flex flex-wrap gap-3 animate-fade-up"
-                style={{ animationDelay: "280ms" }}
-              >
-                <Link href="/catalog" className="btn-primary py-3.5 px-8 text-base">
-                  პროდუქტების ნახვა
-                  <ArrowRight size={18} />
-                </Link>
-                <Link href="/about" className="btn-secondary py-3.5 px-8 text-base">
-                  ჩვენს შესახებ
-                </Link>
-              </div>
-            </div>
-
-            {/* ── Right: pouf visual ── */}
-            <div className="relative flex items-center justify-center order-2 lg:order-2">
-              {/* Warm radial background panel */}
-              <div
-                className="absolute inset-0 rounded-[2.5rem] lg:rounded-none lg:inset-y-0 lg:-right-8 lg:left-0"
-                style={{
-                  background:
-                    "radial-gradient(ellipse 70% 60% at 55% 48%, #F5EFE6 0%, #EBE0D2 45%, #E0D1BF 100%)",
-                }}
-              />
-
-              {/* Oval ground shadow */}
-              <div
-                className="absolute bottom-[14%] left-1/2 -translate-x-1/2 w-[58%] h-[7%] rounded-full pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(ellipse, rgba(107,79,58,0.22) 0%, transparent 70%)",
-                  filter: "blur(12px)",
-                }}
-              />
-
-              {/* Floating pouf */}
-              <div className="relative z-10 w-[min(480px,88vw)] animate-float py-12 lg:py-20">
-                <Image
-                  src="/images/hero-pouf.png"
-                  alt="Puffico — ბუნებრივი ხელნაკეთი პუფი"
-                  width={480}
-                  height={400}
-                  priority
-                  className="w-full h-auto drop-shadow-xl select-none"
-                  style={{
-                    filter: "drop-shadow(0 32px 48px rgba(107,79,58,0.18))",
-                  }}
-                />
-              </div>
-            </div>
-
-          </div>
+        {/* Scroll indicator */}
+        <div className="animate-fade-up absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-puff-muted/50"
+          style={{ animationDelay: "500ms" }}>
+          <span className="text-[10px] tracking-widest uppercase font-medium">scroll</span>
+          <svg width="16" height="24" viewBox="0 0 16 24" fill="none" className="animate-bounce">
+            <rect x="6.5" y="1" width="3" height="3" rx="1.5" fill="currentColor" />
+            <path d="M8 7v10M8 17l-3-3M8 17l3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </div>
       </section>
 
